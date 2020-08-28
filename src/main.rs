@@ -1,5 +1,34 @@
 use std::io;
 
+enum Operator {
+    Plus,
+    Minus,
+    Multiply,
+    Divide
+}
+
+impl Operator {
+    fn initialize(operator: &str) -> Operator {
+        match operator {
+            "+" => Operator::Plus,
+            "-" => Operator::Minus,
+            "*" => Operator::Multiply,
+            "/" => Operator::Divide,
+            _ => panic!()
+        }
+    }
+
+    // i32はCopyトレイトに適合しているので参照でなくても大丈夫
+    fn calclate(&self, lhs: i32, rhs: i32) -> i32 {
+        match self {
+            Operator::Plus => lhs + rhs,
+            Operator::Minus => lhs - rhs,
+            Operator::Multiply => lhs * rhs,
+            Operator::Divide => lhs / rhs
+        }
+    }
+}
+
 fn main() {
     println!("Simple Calculator!");
     println!("please input first number.");
@@ -15,6 +44,10 @@ fn main() {
     println!("second inpputed number is {}", second_number);
 
     println!("finally, choose operator.\n you can choose from +, -, *, /.");
-    let mut operator = String::new();
-    io::stdin().read_line(&mut operator).expect("failed to scan your input operator.");
+    let mut input_operator = String::new();
+    io::stdin().read_line(&mut input_operator).expect("failed to scan your input operator.");
+    let input_operator = input_operator.trim();
+    let operator: Operator = Operator::initialize(&input_operator);
+    let result = operator.calclate(first_number, second_number);
+    println!("Result is {}", result);
 }
